@@ -60,8 +60,6 @@ export const Todolist = (props: TodoListPropsType) => {
                 <button onClick={()=>{changeFilter('All')}}>All</button>
                 <button onClick={()=>{changeFilter('Active')}}>Active</button>
                 <button onClick={()=>{changeFilter('Completed')}}>Completed</button>
-
-
             </div>
         </div>
     )
