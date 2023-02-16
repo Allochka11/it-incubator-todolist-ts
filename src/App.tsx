@@ -3,8 +3,7 @@ import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
-import AppBar from '@mui/material/AppBar/AppBar';
-import {Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 
 
@@ -39,20 +38,6 @@ function App() {
             {id: v1(), title: "React Book", isDone: true}
         ]
     });
-
-    // const [a, setA] = useState(1);
-    // if(a === 1) {
-    //     setA(state => {
-    //         console.log(state)
-    //         return state + 1
-    //     })
-    // }
-    // console.log(a)
-
-
-
-
-
 
     function removeTask(id: string, todolistId: string) {
         //достанем нужный массив по todolistId:
@@ -113,9 +98,7 @@ function App() {
         // удалим таски для этого тудулиста из второго стейта, где мы храним отдельно таски
         delete tasks[id]; // удаляем св-во из объекта... значением которого являлся массив тасок
         // засетаем в стейт копию объекта, чтобы React отреагировал перерисовкой
-
         setTasks({...tasks});
-
     }
 
     function changeTodolistTitle(id: string, title: string) {
@@ -143,7 +126,7 @@ function App() {
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu />
+                        <Menu/>
                     </IconButton>
                     <Typography variant="h6">
                         News

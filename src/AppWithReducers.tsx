@@ -1,23 +1,20 @@
-import React, {Reducer, useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import './App.css';
 import {TaskType, Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from './AddItemForm';
-import AppBar from '@mui/material/AppBar/AppBar';
-import {Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
+import {AppBar, Button, Container, Grid, IconButton, Paper, Toolbar, Typography} from "@mui/material";
 import {Menu} from "@mui/icons-material";
 import {
-    AddTodolistAC, ChangeTodolistFilterAC,
-    ChangeTodolistTitleAC,
-    RemoveTodolistAC,
-    TodolistsActionsType,
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
+    removeTodolistAC,
     todolistsReducer
-} from "./state/todolists-reducer";
-import {AddTaskAC, ChangeTaskStatusAC, ChangeTaskTitleAC, RemoveTaskAC, tasksReducer} from "./state/tasks-reducer";
-
+} from './state/todolists-reducer';
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from './state/tasks-reducer';
 
 export type FilterValuesType = "all" | "active" | "completed";
-
 export type TodolistType = {
     id: string
     title: string
@@ -29,16 +26,16 @@ export type TasksStateType = {
 }
 
 
-function AppWithReducer() {
+function AppWithReducers() {
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-    let [todolists, disptchToTodolists] = useReducer<Reducer<Array<TodolistType>, TodolistsActionsType>>(todolistsReducer,[
+    let [todolists, dispatchToTodolists] = useReducer(todolistsReducer, [
         {id: todolistId1, title: "What to learn", filter: "all"},
         {id: todolistId2, title: "What to buy", filter: "all"}
     ])
 
-    let [tasks, disptchToTasks] = useReducer(tasksReducer,{
+    let [tasks, dispatchToTasks] = useReducer(tasksReducer, {
         [todolistId1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true}
@@ -50,41 +47,45 @@ function AppWithReducer() {
     });
 
     function removeTask(id: string, todolistId: string) {
-        disptchToTasks(RemoveTaskAC(id,todolistId));
+        const action = removeTaskAC(id, todolistId);
+        dispatchToTasks(action);
     }
 
     function addTask(title: string, todolistId: string) {
-        disptchToTasks(AddTaskAC(title,todolistId));
+        const action = addTaskAC(title, todolistId);
+        dispatchToTasks(action);
     }
 
     function changeStatus(id: string, isDone: boolean, todolistId: string) {
-        disptchToTasks(ChangeTaskStatusAC(id, isDone,todolistId));
+        const action = changeTaskStatusAC(id, isDone, todolistId);
+        dispatchToTasks(action);
     }
 
     function changeTaskTitle(id: string, newTitle: string, todolistId: string) {
-        disptchToTasks(ChangeTaskTitleAC(id, newTitle, todolistId));
+        const action = changeTaskTitleAC(id, newTitle, todolistId);
+        dispatchToTasks(action);
     }
 
     function changeFilter(value: FilterValuesType, todolistId: string) {
-        disptchToTodolists(ChangeTodolistFilterAC(todolistId, value ))
+        const action = changeTodolistFilterAC(todolistId, value);
+        dispatchToTodolists(action);
     }
 
     function removeTodolist(id: string) {
-        let action = RemoveTodolistAC(id) // деллаем общий екшн тк чтобы не создавать лишний обьект АК(один и тот же 2 раза)
-
-        disptchToTodolists(action)
-        disptchToTasks(action)
-
+        const action = removeTodolistAC(id);
+        dispatchToTasks(action);
+        dispatchToTodolists(action);
     }
 
     function changeTodolistTitle(id: string, title: string) {
-        disptchToTodolists(ChangeTodolistTitleAC(id, title))
+        const action = changeTodolistTitleAC(id, title);
+        dispatchToTodolists(action);
     }
 
     function addTodolist(title: string) {
-        let action = AddTodolistAC(title);//тут общая id получается, тк мы создаем ее в AddTodolistAC и передаем потом в оба редюсера
-        disptchToTodolists(action); //добавляем тудулист и в AddTodolistAC генерируется id
-        disptchToTasks(action);//доб. пустую таску с id из AddTodolistAC
+        const action = addTodolistAC(title);
+        dispatchToTasks(action);
+        dispatchToTodolists(action);
     }
 
     return (
@@ -92,7 +93,7 @@ function AppWithReducer() {
             <AppBar position="static">
                 <Toolbar>
                     <IconButton edge="start" color="inherit" aria-label="menu">
-                        <Menu />
+                        <Menu/>
                     </IconButton>
                     <Typography variant="h6">
                         News
@@ -143,4 +144,4 @@ function AppWithReducer() {
     );
 }
 
-export default AppWithReducer;
+export default AppWithReducers;
