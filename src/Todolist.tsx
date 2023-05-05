@@ -3,7 +3,7 @@ import {AddItemForm} from './AddItemForm'
 import {EditableSpan} from './EditableSpan'
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-import { Delete } from '@mui/icons-material';
+import {Delete} from '@mui/icons-material';
 import {Task} from './Task'
 import {TaskStatuses, TaskType} from './api/todolists-api'
 import {FilterValuesType} from './state/todolists-reducer'
@@ -43,6 +43,7 @@ export const Todolist = React.memo(function (props: PropsType) {
 
 
     let tasksForTodolist = props.tasks
+    console.log(props.id,tasksForTodolist)
 
     if (props.filter === 'active') {
         tasksForTodolist = props.tasks.filter(t => t.status === TaskStatuses.New)
