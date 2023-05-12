@@ -16,11 +16,11 @@ import {
     changeTodolistTitleTC,
     createTodolistTC,
     FilterValuesType,
-    getTodolistsTC,
     removeTodolistTC,
+    setTodolistsTC,
     TodolistDomainType
 } from './state/todolists-reducer'
-import {changeTaskTitleTC, createTaskTC, removeTaskTC, updateTaskTC} from './state/tasks-reducer';
+import {addTaskTC, removeTaskTC, updateTaskStatusTitleTC} from './state/tasks-reducer';
 import {useAppDispatch, useAppSelector} from './state/store';
 import {TaskStatuses, TaskType} from './api/todolists-api'
 
@@ -33,7 +33,7 @@ export type TasksStateType = {
 function App() {
 
     useEffect(()=>{
-        dispatch(getTodolistsTC())
+        dispatch(setTodolistsTC())
     }, [])
 
     const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
@@ -45,16 +45,16 @@ function App() {
     }, []);
 
     const addTask = useCallback(function (title: string, todolistId: string) {
-        dispatch(createTaskTC(title, todolistId));
+        dispatch(addTaskTC(title,todolistId));
     }, []);
 
     const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-        dispatch(updateTaskTC(todolistId,id, status))
+        dispatch(updateTaskStatusTitleTC(todolistId,id, {status}))
     }, []);
 
     const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
         // const action = changeTaskTitleTC(id, newTitle, todolistId);
-        dispatch(changeTaskTitleTC(id, newTitle, todolistId));
+        dispatch(updateTaskStatusTitleTC(todolistId, id, {title:newTitle}));
     }, []);
 
     const changeFilter = useCallback(function (value: FilterValuesType, todolistId: string) {
