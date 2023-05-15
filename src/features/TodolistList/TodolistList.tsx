@@ -1,24 +1,24 @@
 import React, {useCallback} from "react";
-import {useAppDispatch, useAppSelector} from "../../state/store";
+import {useAppDispatch, useAppSelector} from "../../app/store";
 import {
     changeTodolistFilterAC, changeTodolistTitleTC, createTodolistTC,
     FilterValuesType,
     removeTodolistTC,
     TodolistDomainType
-} from "../../state/todolists-reducer";
-import {addTaskTC, removeTaskTC, updateTaskStatusTitleTC} from "../../state/tasks-reducer";
+} from "./todolists-reducer";
+import {addTaskTC, removeTaskTC, updateTaskStatusTitleTC} from "./tasks-reducer";
 import {TaskStatuses} from "../../api/todolists-api";
 import Grid from "@mui/material/Grid";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import Paper from "@mui/material/Paper";
-import {Todolist} from "../../Todolist";
+import {Todolist} from "./Todolist/Todolist";
 import {TasksStateType} from "../../app/App";
 
 type TodolistListType = {
     // todolists: TodolistDomainType
 }
 
-const TodolistList: React.FC<TodolistListType> = (props) => {
+const TodolistList: React.FC<TodolistListType> = () => {
     const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useAppSelector<TasksStateType>(state => state.tasks)
     const dispatch = useAppDispatch();

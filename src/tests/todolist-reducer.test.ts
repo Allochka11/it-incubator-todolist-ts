@@ -1,11 +1,12 @@
 import {
-    addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, changeTodolistTitleTC,
+    addTodolistAC,
+    changeTodolistFilterAC,
+    changeTodolistTitleAC,
     removeTodolistAC,
     setTodolistsAC,
     TodolistDomainType,
     todolistsReducer
-} from "../state/todolists-reducer";
-import {v1} from "uuid";
+} from "../features/TodolistList/todolists-reducer";
 
 
 let startState:Array<TodolistDomainType>;

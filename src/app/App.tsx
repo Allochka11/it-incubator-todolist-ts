@@ -7,8 +7,8 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import {Menu} from '@mui/icons-material';
-import {setTodolistsTC} from '../state/todolists-reducer'
-import {useAppDispatch} from '../state/store';
+import {setTodolistsTC} from '../features/TodolistList/todolists-reducer'
+import {useAppDispatch} from './store';
 import {TaskType} from '../api/todolists-api'
 import TodolistList from '../features/TodolistList/TodolistList';
 

@@ -1,7 +1,7 @@
-import {TasksStateType} from '../app/App';
+import {TasksStateType} from '../../app/App';
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from './todolists-reducer';
-import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/todolists-api'
-import {AppRootStateType, AppThunkType} from "./store";
+import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api'
+import {AppRootStateType, AppThunkType} from "../../app/store";
 
 const initialState: TasksStateType = {
     /*"todolistId1": [
@@ -102,7 +102,7 @@ export const setTasksAC = (tasks: TaskType[], todolistId: string) => ({type: 'SE
 // thunks
 export const removeTaskTC = (todolistId: string, taskId: string): AppThunkType => async dispatch => {
     try {
-        const res = await todolistsAPI.deleteTask(todolistId, taskId);
+        await todolistsAPI.deleteTask(todolistId, taskId);
         dispatch(removeTaskAC(taskId, todolistId))
     } catch (e) {
         console.log(e)
@@ -145,7 +145,7 @@ export const updateTaskStatusTitleTC = (todolistId: string, taskId: string, doma
             status: task.status,
             ...domain
         }
-        todolistsAPI.updateTask(todolistId, taskId, apiModel).then(res => {
+        todolistsAPI.updateTask(todolistId, taskId, apiModel).then(() => {
             dispatch(updateTaskAC(taskId, apiModel, todolistId))
         })
     }

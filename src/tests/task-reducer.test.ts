@@ -1,14 +1,6 @@
-import {
-    addTodolistAC, changeTodolistFilterAC, changeTodolistTitleAC, changeTodolistTitleTC,
-    removeTodolistAC,
-    setTodolistsAC,
-    TodolistDomainType,
-    todolistsReducer
-} from "../state/todolists-reducer";
-import {v1} from "uuid";
 import {TasksStateType} from "../app/App";
 import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
-import {addTaskAC, removeTaskAC, tasksReducer, updateTaskAC} from "../state/tasks-reducer";
+import {addTaskAC, removeTaskAC, tasksReducer, updateTaskAC} from "../features/TodolistList/tasks-reducer";
 
 
 let startState: TasksStateType = {};
@@ -69,7 +61,6 @@ test('test of update task title', () => {
 
 });
 test('test of update task status', () => {
-    let newTitle = 'New Title';
     let domain = {
         title: 'bread',
         description: '',
