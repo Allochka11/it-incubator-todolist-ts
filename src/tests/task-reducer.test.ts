@@ -6,7 +6,7 @@ import {
     todolistsReducer
 } from "../state/todolists-reducer";
 import {v1} from "uuid";
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../app/App";
 import {TaskPriorities, TaskStatuses} from "../api/todolists-api";
 import {addTaskAC, removeTaskAC, tasksReducer, updateTaskAC} from "../state/tasks-reducer";
 

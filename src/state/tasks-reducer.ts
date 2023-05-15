@@ -1,4 +1,4 @@
-import {TasksStateType} from '../App';
+import {TasksStateType} from '../app/App';
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../api/todolists-api'
 import {AppRootStateType, AppThunkType} from "./store";
@@ -25,18 +25,16 @@ const initialState: TasksStateType = {
 
 export const tasksReducer = (state: TasksStateType = initialState, action: TaskActionTypes): TasksStateType => {
     switch (action.type) {
-        case 'SET_TODOLISTS': {
+        case 'SET_TODOLISTS':
             let copyState = {...state}
             action.todolists.map(el => {
                 copyState[el.id] = []
             })
             return copyState
-        }
         case 'UPDATE_TASK':
-            return {...state, [action.todolistId]: state[action.todolistId].map(t=> t.id === action.taskId ? {...t,...action.domain} : t)}
+            return {...state, [action.todolistId]: state[action.todolistId].map(t=> t.id === action.taskId ? {...t,...action.updatedTask} : t)}
         case 'SET_TASKS':
-            return {...state, [action.todolistId]: action.tasks
-            }
+            return {...state, [action.todolistId]: action.tasks}
         case 'REMOVE-TASK':
             return {...state, [action.todolistId]: state[action.todolistId].filter(t => t.id !== action.taskId)}
         case 'ADD-TASK':
@@ -61,15 +59,11 @@ export const tasksReducer = (state: TasksStateType = initialState, action: TaskA
         //     state[action.todolistId] = newTasksArray;
         //     return ({...state});
         // }
-        case 'ADD-TODOLIST': {
-
-            return {
-                ...state,
-                [action.id]: []
-            }
-        }
+        case 'ADD-TODOLIST':
+            return {...state, [action.id]: []}
         case 'REMOVE-TODOLIST': {
-            const copyState = {...state};
+
+           const copyState = {...state}
             delete copyState[action.id];
             return copyState;
         }
@@ -85,9 +79,9 @@ export const removeTaskAC = (taskId: string, todolistId: string) => ({
     todolistId
 } as const);
 export const addTaskAC = (newTask: TaskType, todolistId: string) => ({type: 'ADD-TASK', newTask, todolistId} as const);
-export const updateTaskAC = (taskId: string, domain: UpdateTaskModelType, todolistId: string) => ({
+export const updateTaskAC = (taskId: string, updatedTask: UpdateTaskModelType, todolistId: string) => ({
     type: 'UPDATE_TASK',
-    domain,
+    updatedTask,
     todolistId,
     taskId
 } as const);
