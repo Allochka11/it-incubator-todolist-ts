@@ -114,7 +114,11 @@ export const addTaskTC = (title: string, todolistId: string): AppThunkType =>
                 dispatch(addTaskAC(res.data.data.item, todolistId));
                 dispatch(setRequestStatus('succeeded'));
             } else {
-                dispatch(setRequestError(res.data.messages[0]));
+                if( res.data.messages.length) {
+                    dispatch(setRequestError(res.data.messages[0]));
+                } else {
+                    dispatch(setRequestError('Some error occurred'));
+                }
                 dispatch(setRequestStatus('failed'))
             }
         })
