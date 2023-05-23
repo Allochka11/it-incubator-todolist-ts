@@ -8,9 +8,11 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import {Menu} from '@mui/icons-material';
 import {setTodolistsTC} from '../features/TodolistList/todolists-reducer'
-import {useAppDispatch} from './store';
+import {useAppDispatch, useAppSelector} from './store';
 import {TaskType} from '../api/todolists-api'
 import TodolistList from '../features/TodolistList/TodolistList';
+import LinearProgress from "@mui/material/LinearProgress";
+import ErrorSnackbar from "../components/ErrorSnackbar/ErrorSnackbar";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -22,6 +24,8 @@ function App() {
     useEffect(() => {
         dispatch(setTodolistsTC())
     }, [])
+
+    const status = useAppSelector(state => state.app.status)
 
     return (
         <div className="App">
@@ -36,9 +40,11 @@ function App() {
                     <Button color="inherit">Login</Button>
                 </Toolbar>
             </AppBar>
+            {status === 'loading' && <LinearProgress/>}
             <Container fixed>
                 <TodolistList/>
             </Container>
+            <ErrorSnackbar/>
         </div>
     );
 }

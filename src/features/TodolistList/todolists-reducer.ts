@@ -1,5 +1,6 @@
 import {todolistsAPI, TodolistType} from '../../api/todolists-api'
 import {AppThunkType} from '../../app/store';
+import {setRequestStatus} from "../../app/app-reducer";
 
 const initialState: Array<TodolistDomainType> = [
     /*{id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
@@ -48,31 +49,42 @@ export const setTodolistsAC = (todolists: TodolistType[]) => ({type: 'SET_TODOLI
 
 // thunks
 export const setTodolistsTC = (): AppThunkType => (dispatch) => {
+    dispatch(setRequestStatus('loading'))
     todolistsAPI.getTodolists().then((res) => {
-        dispatch(setTodolistsAC(res.data))
+        if(res.status === 200) {
+            dispatch(setTodolistsAC(res.data));
+            dispatch(setRequestStatus('succeeded'))
+        }
+
     })
 }
 export const createTodolistTC = (title: string): AppThunkType =>
     (dispatch) => {
+        dispatch(setRequestStatus('loading'))
         todolistsAPI.createTodolist(title).then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(addTodolistAC(title, res.data.data.item.id))
+                dispatch(setRequestStatus('succeeded'))
             }
         })
     }
 export const removeTodolistTC = (todolistId: string): AppThunkType =>
     (dispatch) => {
+        dispatch(setRequestStatus('loading'))
         todolistsAPI.deleteTodolist(todolistId).then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(removeTodolistAC(todolistId))
+                dispatch(setRequestStatus('succeeded'))
             }
         })
     }
 export const changeTodolistTitleTC = (todolistId: string, title: string): AppThunkType =>
     (dispatch) => {
+        dispatch(setRequestStatus('loading'))
         todolistsAPI.updateTodolist(todolistId, title).then(res => {
             if (res.data.resultCode === 0) {
                 dispatch(changeTodolistTitleAC(todolistId, title))
+                dispatch(setRequestStatus('succeeded'))
             }
         })
     }

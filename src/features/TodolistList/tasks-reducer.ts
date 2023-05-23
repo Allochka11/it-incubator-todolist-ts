@@ -2,6 +2,7 @@ import {TasksStateType} from '../../app/App';
 import {addTodolistAC, removeTodolistAC, setTodolistsAC} from './todolists-reducer';
 import {TaskPriorities, TaskStatuses, TaskType, todolistsAPI, UpdateTaskModelType} from '../../api/todolists-api'
 import {AppRootStateType, AppThunkType} from "../../app/store";
+import {setRequestError, setRequestStatus} from "../../app/app-reducer";
 
 const initialState: TasksStateType = {
     /*"todolistId1": [
@@ -85,18 +86,7 @@ export const updateTaskAC = (taskId: string, updatedTask: UpdateTaskModelType, t
     todolistId,
     taskId
 } as const);
-// export const changeTaskStatusAC = (taskId: string, status: TaskStatuses, todolistId: string) => ({
-//     type: 'CHANGE-TASK-STATUS',
-//     status,
-//     todolistId,
-//     taskId
-// } as const);
-// export const changeTaskTitleAC = (taskId: string, title: string, todolistId: string) => ({
-//     type: 'CHANGE-TASK-TITLE',
-//     title,
-//     todolistId,
-//     taskId
-// } as const);
+
 export const setTasksAC = (tasks: TaskType[], todolistId: string) => ({type: 'SET_TASKS', tasks, todolistId} as const);
 
 // thunks
@@ -110,15 +100,22 @@ export const removeTaskTC = (todolistId: string, taskId: string): AppThunkType =
 }
 export const getTasksTC = (todolistId: string): AppThunkType =>
     (dispatch) => {
+        dispatch(setRequestStatus('loading'));
         todolistsAPI.getTasks(todolistId).then(res => {
             dispatch(setTasksAC(res.data.items, todolistId))
+            dispatch(setRequestStatus('succeeded'))
         })
     }
 export const addTaskTC = (title: string, todolistId: string): AppThunkType =>
     (dispatch) => {
+        dispatch(setRequestStatus('loading'))
         todolistsAPI.createTask(todolistId, title).then(res => {
             if (res.data.resultCode === 0) {
-                dispatch(addTaskAC(res.data.data.item, todolistId))
+                dispatch(addTaskAC(res.data.data.item, todolistId));
+                dispatch(setRequestStatus('succeeded'));
+            } else {
+                dispatch(setRequestError(res.data.messages[0]));
+                dispatch(setRequestStatus('failed'))
             }
         })
     }
@@ -149,47 +146,6 @@ export const updateTaskStatusTitleTC = (todolistId: string, taskId: string, doma
             dispatch(updateTaskAC(taskId, apiModel, todolistId))
         })
     }
-
-// export const updateTaskTC = (todolistId: string, taskId: string, status: TaskStatuses): AppThunkType =>
-//     (dispatch, getState: () => AppRootStateType) => {
-//         let task = getState().tasks[todolistId].find(t => t.id === taskId);
-//
-//         if (task) {
-//             let model: UpdateTaskModelType = {
-//                 title: task.title,
-//                 description: task.description,
-//                 priority: task.priority,
-//                 startDate: task.startDate,
-//                 deadline: task.deadline,
-//                 status
-//             }
-//             todolistsAPI.updateTask(todolistId, taskId, model).then(res => {
-//                 dispatch(changeTaskStatusAC(taskId, status, todolistId))
-//             })
-//         }
-//
-//     }
-// export const changeTaskTitleTC = (taskId: string, newTitle: string, todolistId: string): AppThunkType =>
-//     (dispatch, getState: () => AppRootStateType) => {
-//         let task = getState().tasks[todolistId].find(t => t.id === taskId)
-//         if (task) {
-//             let model: UpdateTaskModelType = {
-//                 title: newTitle,
-//                 description: task.description,
-//                 priority: task.priority,
-//                 startDate: task.startDate,
-//                 deadline: task.deadline,
-//                 status: task.status
-//             }
-//
-//             todolistsAPI.updateTask(todolistId, taskId, model).then(res => {
-//                 if (res.data.resultCode === 0) {
-//                     dispatch(changeTaskTitleAC(taskId, newTitle, todolistId))
-//                 }
-//             })
-//         }
-//
-//     }
 
 //types
 export type TaskActionTypes =
