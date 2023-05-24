@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
+import {RequestStatusType} from "../app/app-reducer";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.1/',
@@ -48,6 +49,11 @@ export type ResponseType<D = {}> = {
     messages: Array<string>
     fieldsErrors: Array<string>
     data: D
+}
+export enum ResultCode {
+    OK,
+    ERROR,
+    ERROR_CAPTCHA = 10
 }
 export enum TaskStatuses {
     New = 0,

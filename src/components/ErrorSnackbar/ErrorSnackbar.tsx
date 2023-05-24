@@ -12,7 +12,7 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
 });
 
 export default function ErrorSnackbar() {
-    const error = useAppSelector(state => state.app.error);
+    const error = useAppSelector<null | string>(state => state.app.error);
     const dispatch = useAppDispatch();
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
         // debugger

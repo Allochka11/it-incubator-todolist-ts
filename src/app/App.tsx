@@ -13,6 +13,7 @@ import {TaskType} from '../api/todolists-api'
 import TodolistList from '../features/TodolistList/TodolistList';
 import LinearProgress from "@mui/material/LinearProgress";
 import ErrorSnackbar from "../components/ErrorSnackbar/ErrorSnackbar";
+import {RequestStatusType} from "./app-reducer";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
@@ -25,7 +26,7 @@ function App() {
         dispatch(setTodolistsTC())
     }, [])
 
-    const status = useAppSelector(state => state.app.status)
+    const status = useAppSelector<RequestStatusType>(state => state.app.status)
 
     return (
         <div className="App">

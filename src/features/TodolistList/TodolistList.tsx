@@ -73,6 +73,7 @@ const TodolistList: React.FC<TodolistListType> = () => {
                                     id={tl.id}
                                     title={tl.title}
                                     tasks={allTodolistTasks}
+                                    entityStatus={tl.entityStatus}
                                     removeTask={removeTask}
                                     changeFilter={changeFilter}
                                     addTask={addTask}

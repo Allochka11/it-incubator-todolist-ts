@@ -21,8 +21,6 @@ export type AppActionTypes = TaskActionTypes | TodolistActionTypes | AppRequestA
 export type AppThunkDispatch = ThunkDispatch<AppRootStateType, any, AnyAction>;
 export const useAppDispatch = () => useDispatch<AppThunkDispatch>();
 export const useAppSelector: TypedUseSelectorHook<AppRootStateType> = useSelector;
-
-
 export type AppThunkType<ReturnType = void> = ThunkAction<ReturnType, AppRootStateType, unknown, AppActionTypes>;
 
 // а это, чтобы можно было в консоли браузера обращаться к store в любой момент
