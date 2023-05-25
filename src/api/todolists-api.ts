@@ -69,6 +69,8 @@ export enum TaskPriorities {
     Later = 4
 }
 export type TaskType = {
+    addedDate: string
+    todoListId: string
     description: string
     title: string
     status: TaskStatuses
@@ -76,10 +78,10 @@ export type TaskType = {
     startDate: string
     deadline: string
     id: string
-    todoListId: string
     order: number
-    addedDate: string
+    entityStatus:RequestStatusType
 }
+
 export type UpdateTaskModelType = {
     title: string
     description: string
@@ -87,6 +89,8 @@ export type UpdateTaskModelType = {
     priority: TaskPriorities
     startDate: string
     deadline: string
+
+
 }
 type GetTasksResponse = {
     error: string | null

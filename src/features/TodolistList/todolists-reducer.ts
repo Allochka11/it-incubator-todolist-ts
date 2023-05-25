@@ -71,7 +71,7 @@ export const createTodolistTC = (title: string): AppThunkType =>
         todolistsAPI.createTodolist(title).then(res => {
             if (res.data.resultCode === ResultCode.OK) {
                 dispatch(addTodolistAC(title, res.data.data.item.id))
-                dispatch(setRequestStatus('succeeded'))
+                // dispatch(setRequestStatus('succeeded'))
             } else {
                 handleServerAppError(dispatch, res.data)
             }

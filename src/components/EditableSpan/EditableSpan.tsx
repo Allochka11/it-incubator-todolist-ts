@@ -5,20 +5,18 @@ import {RequestStatusType} from "../../app/app-reducer";
 type EditableSpanPropsType = {
     value: string
     onChange: (newValue: string) => void
+    disabled?:boolean
 }
 
 
 export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
     console.log('EditableSpan called');
 
-
     let [editMode, setEditMode] = useState(false);
     let [title, setTitle] = useState(props.value);
 
     const activateEditMode = () => {
-        // if(false) {
-        //     setEditMode(false);
-        // }
+        if(props.disabled) return;
         setEditMode(true);
         setTitle(props.value);
     }
@@ -31,6 +29,6 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
     }
 
     return editMode
-        ? <TextField value={title} disabled={true} onChange={changeTitle} autoFocus onBlur={activateViewMode}/>
+        ? <TextField value={title} disabled={props.disabled} onChange={changeTitle} autoFocus onBlur={activateViewMode}/>
         : <span onDoubleClick={activateEditMode} >{props.value}</span>
 });
