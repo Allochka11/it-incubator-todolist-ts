@@ -38,7 +38,7 @@ function App() {
                     {/*    <Menu/>*/}
                     {/*</IconButton>*/}
 
-                    <Button color="inherit">Login</Button>
+                    <Button color="inherit" href={'/login'}>Login</Button>
                     <Button color="inherit">Logout</Button>
 
                 </Toolbar>
