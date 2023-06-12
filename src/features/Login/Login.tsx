@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import Grid from '@mui/material/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
@@ -8,6 +8,9 @@ import FormLabel from '@mui/material/FormLabel';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {useFormik} from "formik";
+import {loginTC} from "./auth-reducer";
+import {useAppDispatch, useAppSelector} from "../../app/store";
+import {Navigate} from "react-router-dom";
 
 type FormikErrorType = {
     email?: string,
@@ -36,6 +39,10 @@ const validate = (values: any) => {
 
 export const Login = () => {
 
+    const dispatch = useAppDispatch();
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
+
+
 
     const formik = useFormik({
         initialValues: {
@@ -45,15 +52,19 @@ export const Login = () => {
         },
 
         onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
+            dispatch(loginTC(values))
 
             // formik.resetForm() сбрасывает форму до initial state кроме checkbox={formik.values.rememberMe}
-            formik.resetForm({
-                values: {email:"lala", password:'', rememberMe: true}
-            });
+            // formik.resetForm({
+            //     values: {email:"lala", password:'', rememberMe: true}
+            // });
         },
         validate,
     });
+
+    if(isLoggedIn) {
+        return <Navigate to={'/'}></Navigate>
+    }
 
     // console.log(formik.errors)
 

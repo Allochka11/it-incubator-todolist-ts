@@ -1,9 +1,9 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../app/store";
 import {
     changeTodolistFilterAC, changeTodolistTitleTC, createTodolistTC,
     FilterValuesType,
-    removeTodolistTC,
+    removeTodolistTC, setTodolistsTC,
     TodolistDomainType
 } from "./todolists-reducer";
 import {addTaskTC, removeTaskTC, updateTaskStatusTitleTC} from "./tasks-reducer";
@@ -13,15 +13,24 @@ import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import Paper from "@mui/material/Paper";
 import {Todolist} from "./Todolist/Todolist";
 import {TasksStateType} from "../../app/App";
+import {Navigate} from "react-router-dom";
 
 type TodolistListType = {
     // todolists: TodolistDomainType
 }
 
 const TodolistList: React.FC<TodolistListType> = () => {
+
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn);
+
     const todolists = useAppSelector<Array<TodolistDomainType>>(state => state.todolists)
     const tasks = useAppSelector<TasksStateType>(state => state.tasks)
     const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        if(!isLoggedIn) return
+        dispatch(setTodolistsTC())
+    }, []);
 
     const removeTask = useCallback(function (id: string, todolistId: string) {
         dispatch(removeTaskTC(todolistId,id))
@@ -57,6 +66,9 @@ const TodolistList: React.FC<TodolistListType> = () => {
         dispatch(createTodolistTC(title));
     }, [dispatch]);
 
+    if(!isLoggedIn) {
+        return <Navigate to={'/login'}></Navigate>
+    }
     return(
         <>
             <Grid container style={{padding: '20px'}}>

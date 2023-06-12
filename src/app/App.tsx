@@ -14,21 +14,34 @@ import {RequestStatusType} from "./app-reducer";
 import {Login} from "../features/Login/Login";
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Error} from "../features/Error/Error";
-import {Avatar} from "@mui/material";
+import {Avatar, CircularProgress} from "@mui/material";
+import {logoutTC, meTC} from "../features/Login/auth-reducer";
 
 export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
 function App() {
-    const dispatch = useAppDispatch();
-
-    useEffect(() => {
-        dispatch(setTodolistsTC())
-    }, []);
-
 
     const status = useAppSelector<RequestStatusType>(state => state.app.status)
+    const isInitialised = useAppSelector<boolean>(state => state.app.isInitialised)
+    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
+    const dispatch = useAppDispatch();
+
+    useEffect(()=>{
+        dispatch(meTC())
+    },[]);
+
+    if(!isInitialised) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+    const logoutHandler = () =>{
+        dispatch(logoutTC())
+    }
+
 
     return (
         <div className="App">
@@ -37,9 +50,9 @@ function App() {
                     {/*<IconButton edge="start" color="inherit" aria-label="menu">*/}
                     {/*    <Menu/>*/}
                     {/*</IconButton>*/}
+                    {isLoggedIn && <Button color="inherit" onClick={logoutHandler} >Logout</Button>}
 
-                    <Button color="inherit" href={'/login'}>Login</Button>
-                    <Button color="inherit">Logout</Button>
+
 
                 </Toolbar>
                 <Avatar
