@@ -3,6 +3,7 @@ import {setIsInitialisedAC, setRequestStatus} from "../../app/app-reducer";
 import {authAPI, LoginParamsType, ResultCode} from "../../api/todolists-api";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
 import axios from "axios";
+import {clearTodosDataAC} from "../TodolistList/todolists-reducer";
 
 const initialState = {
     isLoggedIn: false
@@ -50,8 +51,9 @@ export const logoutTC = () =>
             dispatch(setRequestStatus('loading'));
             const res = await authAPI.logout();
             if(res.data.resultCode === ResultCode.OK){
-                dispatch(setIsLoggedInAC(false))
-                dispatch(setRequestStatus('succeeded'))
+                dispatch(setIsLoggedInAC(false));
+                dispatch(setRequestStatus('succeeded'));
+                dispatch(clearTodosDataAC());
             } else{
                 handleServerAppError(dispatch, res.data)
                 dispatch(setRequestStatus('idle'))

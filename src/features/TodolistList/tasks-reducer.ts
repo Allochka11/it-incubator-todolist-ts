@@ -1,16 +1,23 @@
 import {TasksStateType} from '../../app/App';
-import {addTodolistAC, removeTodolistAC, setEntityStatusAC, setTodolistsAC} from './todolists-reducer';
 import {
-    ResultCode,     TaskPriorities,
+    addTodolistAC,
+    clearTodosDataAC,
+    removeTodolistAC,
+    setEntityStatusAC,
+    setTodolistsAC
+} from './todolists-reducer';
+import {
+    ResultCode,
+    TaskPriorities,
     TaskStatuses,
     TaskType,
     todolistsAPI,
     UpdateTaskModelType
 } from '../../api/todolists-api'
 import {AppRootStateType, AppThunkType} from "../../app/store";
-import {RequestStatusType, setRequestError, setRequestStatus} from "../../app/app-reducer";
+import {RequestStatusType, setRequestStatus} from "../../app/app-reducer";
 import {handleServerAppError, handleServerNetworkError} from "../../utils/error-utils";
-import axios, {Axios, AxiosError} from "axios";
+import axios from "axios";
 
 const initialState: TasksStateType = {
     /*"todolistId1": [
@@ -61,6 +68,8 @@ export const tasksReducer = (state: TasksStateType = initialState, action: TaskA
         }
         case "SET_TASK_ENTITY_STATUS":
             return {...state, [action.todolistId]: state[action.todolistId].map(task => task.id === action.taskId ? {...task, entityStatus:action.entityStatus} : task)}
+        case "CLEAR_TODOS_DATA":
+            return {}
         default:
             return state;
     }
@@ -197,6 +206,7 @@ export type TaskActionTypes =
     | ReturnType<typeof setTodolistsAC>
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof setTaskEntityStatusAC>
+    | ReturnType<typeof clearTodosDataAC>
 
 export type TaskDomainType = TaskType &
     { entityStatus: RequestStatusType }

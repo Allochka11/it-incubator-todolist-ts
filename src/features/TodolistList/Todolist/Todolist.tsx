@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react'
+import React, {useCallback} from 'react'
 import {AddItemForm} from '../../../components/AddItemForm/AddItemForm'
 import {EditableSpan} from '../../../components/EditableSpan/EditableSpan'
 import IconButton from '@mui/material/IconButton';
@@ -7,8 +7,6 @@ import {Delete} from '@mui/icons-material';
 import {Task} from './Task/Task'
 import {TaskStatuses, TaskType} from '../../../api/todolists-api'
 import {FilterValuesType} from '../todolists-reducer'
-import {getTasksTC} from "../tasks-reducer";
-import {useAppDispatch} from "../../../app/store";
 import {RequestStatusType} from "../../../app/app-reducer";
 
 type PropsType = {
@@ -29,11 +27,6 @@ type PropsType = {
 
 export const Todolist = React.memo(function (props: PropsType) {
     console.log('Todolist called')
-    const dispatch = useAppDispatch();
-
-    useEffect(()=>{
-        dispatch(getTasksTC(props.id))
-    },[])
 
     const addTask = useCallback((title: string) => {
         props.addTask(title, props.id)
@@ -61,7 +54,8 @@ export const Todolist = React.memo(function (props: PropsType) {
     }
 
     return <div>
-        <h3><EditableSpan value={props.title} onChange={changeTodolistTitle} disabled={props.entityStatus === 'loading'}/>
+        <h3><EditableSpan value={props.title} onChange={changeTodolistTitle}
+                          disabled={props.entityStatus === 'loading'}/>
             <IconButton onClick={removeTodolist} disabled={props.entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
@@ -70,11 +64,11 @@ export const Todolist = React.memo(function (props: PropsType) {
         <div>
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
-                                          removeTask={props.removeTask}
-                                          changeTaskTitle={props.changeTaskTitle}
-                                          changeTaskStatus={props.changeTaskStatus}
+                                                removeTask={props.removeTask}
+                                                changeTaskTitle={props.changeTaskTitle}
+                                                changeTaskStatus={props.changeTaskStatus}
 
-                    />)
+                />)
             }
         </div>
         <div style={{paddingTop: '10px'}}>
