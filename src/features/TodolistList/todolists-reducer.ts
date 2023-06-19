@@ -81,6 +81,7 @@ export const createTodolistTC = (title: string): AppThunkType =>
         dispatch(setRequestStatus('loading'))
         todolistsAPI.createTodolist(title).then(res => {
             if (res.data.resultCode === ResultCode.OK) {
+                dispatch(setRequestStatus('succeeded'))
                 dispatch(addTodolistAC(title, res.data.data.item.id))
                 // dispatch(setRequestStatus('succeeded'))
             } else {
