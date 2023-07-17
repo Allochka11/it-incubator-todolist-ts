@@ -1,88 +1,75 @@
-import React, {useEffect} from 'react'
-import './App.css';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import {setTodolistsTC} from '../features/TodolistList/todolists-reducer'
-import {useAppDispatch, useAppSelector} from './store';
-import {TaskType} from '../api/todolists-api'
-import TodolistList from '../features/TodolistList/TodolistList';
-import LinearProgress from "@mui/material/LinearProgress";
-import ErrorSnackbar from "../components/ErrorSnackbar/ErrorSnackbar";
-import {RequestStatusType} from "./app-reducer";
-import {Login} from "../features/Login/Login";
-import {Navigate, Route, Routes} from "react-router-dom";
-import {Error} from "../features/Error/Error";
-import {Avatar, CircularProgress} from "@mui/material";
-import {logoutTC, meTC} from "../features/Login/auth-reducer";
+import React, { useCallback, useEffect } from 'react'
+import './App.css'
+import { TodolistsList } from '../features/TodolistsList/TodolistsList'
+import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppRootStateType } from './store'
+import { initializeAppTC, RequestStatusType } from './app-reducer'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Login } from '../features/Login/Login'
+import { logoutTC } from '../features/Login/auth-reducer'
+import {
+	AppBar,
+	Button,
+	CircularProgress,
+	Container,
+	IconButton,
+	LinearProgress,
+	Toolbar,
+	Typography
+} from '@mui/material';
+import { Menu } from '@mui/icons-material'
 
-export type TasksStateType = {
-    [key: string]: Array<TaskType>
+type PropsType = {
+	demo?: boolean
 }
 
-function App() {
+function App({demo = false}: PropsType) {
+	const status = useSelector<AppRootStateType, RequestStatusType>((state) => state.app.status)
+	const isInitialized = useSelector<AppRootStateType, boolean>((state) => state.app.isInitialized)
+	const isLoggedIn = useSelector<AppRootStateType, boolean>(state => state.auth.isLoggedIn)
+	const dispatch = useDispatch<any>()
 
-    const status = useAppSelector<RequestStatusType>(state => state.app.status)
-    const isInitialised = useAppSelector<boolean>(state => state.app.isInitialised)
-    const isLoggedIn = useAppSelector<boolean>(state => state.auth.isLoggedIn)
-    const dispatch = useAppDispatch();
+	useEffect(() => {
+		dispatch(initializeAppTC())
+	}, [])
 
-    useEffect(()=>{
-        dispatch(meTC())
-    },[]);
+	const logoutHandler = useCallback(() => {
+		dispatch(logoutTC())
+	}, [])
 
-    if(!isInitialised) {
-        return <div
-            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
-            <CircularProgress/>
-        </div>
-    }
-    const logoutHandler = () =>{
-        dispatch(logoutTC())
-    }
+	if (!isInitialized) {
+		return <div
+			style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+			<CircularProgress/>
+		</div>
+	}
 
-
-    return (
-        <div className="App">
-            <AppBar position="static" style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Toolbar>
-                    {/*<IconButton edge="start" color="inherit" aria-label="menu">*/}
-                    {/*    <Menu/>*/}
-                    {/*</IconButton>*/}
-                    {isLoggedIn && <Button color="inherit" onClick={logoutHandler} >Logout</Button>}
-
-
-
-                </Toolbar>
-                <Avatar
-                    alt="Remy Sharp"
-                    src=""
-                    sx={{ width: 56, height: 56 }}
-                    style={{ margin: '4px 10px 0 0px'}}
-                />
-
-            </AppBar>
-            {status === 'loading' && <LinearProgress/>}
-            <Container fixed>
-
-                    <Routes>
-                        <Route path={'/'} element={ <TodolistList/>}/>
-                        <Route path={'/login'} element={ <Login/>}/>
-                        <Route path={'/404'} element={ <Error/>}/>
-                        <Route path="/login/*" element={<Navigate to="/login" replace />} />
-                        <Route path="*" element={<Navigate to="/404"  />} />
-                    </Routes>
-
-
-                {/*<Error/>*/}
-            </Container>
-            <ErrorSnackbar/>
-
-        </div>
-    );
+	return (
+		<BrowserRouter>
+			<div className="App">
+				<ErrorSnackbar/>
+				<AppBar position="static">
+					<Toolbar>
+						<IconButton edge="start" color="inherit" aria-label="menu">
+							<Menu/>
+						</IconButton>
+						<Typography variant="h6">
+							News
+						</Typography>
+						{isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+					</Toolbar>
+					{status === 'loading' && <LinearProgress/>}
+				</AppBar>
+				<Container fixed>
+					<Routes>
+						<Route path={'/'} element={<TodolistsList demo={demo}/>}/>
+						<Route path={'/login'} element={<Login/>}/>
+					</Routes>
+				</Container>
+			</div>
+		</BrowserRouter>
+	)
 }
-export default App;
 
-
-
+export default App
