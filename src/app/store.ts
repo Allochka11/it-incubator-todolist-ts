@@ -15,11 +15,10 @@ const rootReducer = combineReducers({
   auth: authReducer,
 });
 
+// непосредственно создаём store
 export const store = configureStore({
   reducer: rootReducer,
 });
-// непосредственно создаём store
-export const _store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 // определить автоматически тип всего объекта состояния
 export type AppRootStateType = ReturnType<typeof rootReducer>;
 
