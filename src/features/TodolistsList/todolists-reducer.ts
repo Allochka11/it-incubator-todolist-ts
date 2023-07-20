@@ -1,10 +1,10 @@
 import { todolistsAPI, TodolistType } from "api/todolists-api";
-import { Dispatch } from "redux";
 import { appActions, RequestStatusType } from "app/app-reducer";
 import { handleServerNetworkError } from "utils/error-utils";
 import { AppThunk } from "app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchTasksTC } from "features/TodolistsList/tasks-reducer";
+import { clearTasksAndTodolists } from "common/actions/common.actions";
 
 const slice = createSlice({
   name: "todolist",
@@ -35,9 +35,11 @@ const slice = createSlice({
     setTodolists: (state, action: PayloadAction<{ todolists: Array<TodolistType> }>) => {
       return action.payload.todolists.map((tl) => ({ ...tl, filter: "all", entityStatus: "idle" }));
     },
-    clearAllTodolists: (state, action: PayloadAction) => {
+  },
+  extraReducers: (builder) => {
+    builder.addCase(clearTasksAndTodolists.type, () => {
       return [];
-    },
+    });
   },
 });
 
