@@ -1,6 +1,5 @@
 {
   "name": "it-incubator-todolist-ts",
-  "homepage": "https://Allochka11.github.io/it-incubator-todolist-ts",
   "jest": {
     "moduleNameMapper": {
       "axios": "axios/dist/node/axios.cjs"
