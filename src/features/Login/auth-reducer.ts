@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
+import axios from "axios";
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
@@ -28,9 +29,11 @@ export const authActions = slice.actions;
 export const loginTC =
   (data: LoginParamsType): AppThunk =>
   (dispatch) => {
+    debugger;
     dispatch(appActions.setAppStatus({ status: "loading" }));
     authAPI
       .login(data)
+
       .then((res) => {
         if (res.data.resultCode === 0) {
           dispatch(authActions.setIsLoggedIn({ isLoggedIn: true }));
@@ -40,6 +43,10 @@ export const loginTC =
         }
       })
       .catch((error) => {
+        debugger;
+        if (axios.isAxiosError(error) && error.response?.status === 401) {
+          return "alalla";
+        }
         handleServerNetworkError(error, dispatch);
       });
   };

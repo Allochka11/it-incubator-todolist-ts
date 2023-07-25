@@ -5,6 +5,7 @@ import { AppThunk } from "app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { fetchTasksTC } from "features/TodolistsList/tasks-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
+import { AxiosError } from "axios";
 
 const slice = createSlice({
   name: "todolist",
@@ -62,7 +63,7 @@ export const fetchTodolistsTC = (): AppThunk => {
           dispatch(fetchTasksTC(tl.id));
         });
       })
-      .catch((error) => {
+      .catch((error: AxiosError) => {
         handleServerNetworkError(error, dispatch);
       });
   };
