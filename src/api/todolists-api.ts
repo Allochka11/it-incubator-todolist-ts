@@ -52,7 +52,7 @@ export type LoginParamsType = {
 
 export const authAPI = {
   login(data: LoginParamsType) {
-    const promise = instance.post<ResponseType<{ userId?: number }>>("auth/login", data);
+    const promise = instance.post<ResponseType<{ userId?: number }>>("auth/login", data, { withCredentials: true });
     return promise;
   },
   logout() {
@@ -60,7 +60,9 @@ export const authAPI = {
     return promise;
   },
   me() {
-    const promise = instance.get<ResponseType<{ id: number; email: string; login: string }>>("auth/me");
+    const promise = instance.get<ResponseType<{ id: number; email: string; login: string }>>("auth/me", {
+      withCredentials: true,
+    });
     return promise;
   },
 };
