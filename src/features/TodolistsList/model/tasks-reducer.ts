@@ -3,14 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { todolistsActions } from "features/TodolistsList/model/todolists-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils";
+import { todolistsAPI } from "features/TodolistsList/api/todolists.api";
 import {
   AddTaskArgType,
   RemoveTaskArgType,
   TaskType,
-  todolistsAPI,
   UpdateDomainTaskModelType,
   UpdateTaskArgType,
-} from "features/TodolistsList/api/todolists.api";
+} from "features/TodolistsList/api/todolist.types";
 
 const slice = createSlice({
   name: "tasks",

@@ -5,7 +5,8 @@ import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { AxiosError } from "axios";
 import { handleServerNetworkError } from "common/utils";
-import { todolistsAPI, TodolistType } from "features/TodolistsList/api/todolists.api";
+import { todolistsAPI } from "features/TodolistsList/api/todolists.api";
+import { TodolistType } from "features/TodolistsList/api/todolist.types";
 
 const slice = createSlice({
   name: "todolist",
