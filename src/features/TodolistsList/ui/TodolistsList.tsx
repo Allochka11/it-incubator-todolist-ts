@@ -7,14 +7,14 @@ import {
   FilterValuesType,
   removeTodolistTC,
   todolistsActions,
-} from "./todolists-reducer";
-import { addTaskTC, removeTaskTC, updateTaskTC } from "./tasks-reducer";
-import { TaskStatuses } from "api/todolists-api";
+} from "features/TodolistsList/model/todolists-reducer";
+import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
+import { TaskStatuses } from "common/api/baseApi";
 import { Grid, Paper } from "@mui/material";
-import { AddItemForm } from "components/AddItemForm/AddItemForm";
-import { Todolist } from "./Todolist/Todolist";
+import { AddItemForm } from "common/components/AddItemForm/AddItemForm";
+import { Todolist } from "features/TodolistsList/ui/Todolist/Todolist";
 import { Navigate } from "react-router-dom";
-import { useAppDispatch } from "hooks/useAppDispatch";
+import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { isLoggedInSelector, tasksSelector, todolistsSelector } from "app/app.selector";
 
 type PropsType = {
@@ -37,22 +37,22 @@ export const TodolistsList: React.FC<PropsType> = ({ demo = false }) => {
   }, []);
 
   const removeTask = useCallback(function (id: string, todolistId: string) {
-    const thunk = removeTaskTC(id, todolistId);
+    const thunk = tasksThunks.removeTask({ todolistId: todolistId, taskId: id });
     dispatch(thunk);
   }, []);
 
   const addTask = useCallback(function (title: string, todolistId: string) {
-    const thunk = addTaskTC(title, todolistId);
-    dispatch(thunk);
+    dispatch(tasksThunks.addTask({ todolistId, title }));
   }, []);
 
   const changeStatus = useCallback(function (id: string, status: TaskStatuses, todolistId: string) {
-    const thunk = updateTaskTC(id, { status }, todolistId);
+    const thunk = tasksThunks.updateTask({ taskId: id, model: { status }, todolistId: todolistId });
     dispatch(thunk);
   }, []);
 
   const changeTaskTitle = useCallback(function (id: string, newTitle: string, todolistId: string) {
-    const thunk = updateTaskTC(id, { title: newTitle }, todolistId);
+    // const thunk = updateTaskTC(id, { title: newTitle }, todolistId);
+    const thunk = tasksThunks.updateTask({ taskId: id, model: { title: newTitle }, todolistId: todolistId });
     dispatch(thunk);
   }, []);
 

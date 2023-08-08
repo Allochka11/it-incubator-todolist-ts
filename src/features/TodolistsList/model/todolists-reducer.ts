@@ -1,11 +1,11 @@
-import { todolistsAPI, TodolistType } from "api/todolists-api";
 import { appActions, RequestStatusType } from "app/app-reducer";
-import { handleServerNetworkError } from "utils/error-utils";
 import { AppThunk } from "app/store";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { fetchTasksTC } from "features/TodolistsList/tasks-reducer";
+import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { AxiosError } from "axios";
+import { handleServerNetworkError } from "common/utils";
+import { todolistsAPI, TodolistType } from "features/TodolistsList/api/todolists.api";
 
 const slice = createSlice({
   name: "todolist",
@@ -60,7 +60,7 @@ export const fetchTodolistsTC = (): AppThunk => {
       })
       .then((res) => {
         res.forEach((tl) => {
-          dispatch(fetchTasksTC(tl.id));
+          dispatch(tasksThunks.fetchTasks(tl.id));
         });
       })
       .catch((error: AxiosError) => {

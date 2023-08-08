@@ -1,10 +1,10 @@
 // import { setAppStatusAC } from "app/app-reducer";
-import { authAPI, LoginParamsType } from "api/todolists-api";
-import { handleServerAppError, handleServerNetworkError } from "utils/error-utils";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppThunk } from "app/store";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
+import { authAPI, LoginParamsType } from "features/auth/api/auth.api";
+import { handleServerAppError, handleServerNetworkError } from "common/utils";
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
