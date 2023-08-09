@@ -1,6 +1,6 @@
 import { appActions } from "app/app-reducer";
 import { createSlice } from "@reduxjs/toolkit";
-import { todolistsActions } from "features/TodolistsList/model/todolists-reducer";
+import { todolistsThunks } from "features/TodolistsList/model/todolists-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils";
 import { todolistsAPI } from "features/TodolistsList/api/todolists.api";
@@ -35,13 +35,15 @@ const slice = createSlice({
         const tasksForCurrentTodolist = state[action.payload.task.todoListId];
         tasksForCurrentTodolist.unshift(action.payload.task);
       })
-      .addCase(todolistsActions.addTodolist, (state, action) => {
+
+      .addCase(todolistsThunks.addTodolist.fulfilled, (state, action) => {
         state[action.payload.todolist.id] = [];
       })
-      .addCase(todolistsActions.removeTodolist, (state, action) => {
-        delete state[action.payload.id];
+
+      .addCase(todolistsThunks.removeTodolist.fulfilled, (state, action) => {
+        delete state[action.payload.todolistId];
       })
-      .addCase(todolistsActions.setTodolists, (state, action) => {
+      .addCase(todolistsThunks.fetchTodolists.fulfilled, (state, action) => {
         action.payload.todolists.forEach((tl) => {
           state[tl.id] = [];
         });
@@ -58,6 +60,7 @@ const fetchTasks = createAppAsyncThunk<{ tasks: Array<TaskType>; todolistId: str
   "tasks/fetchTasks",
   async (todolistId, thunkAPI) => {
     let { dispatch, rejectWithValue } = thunkAPI;
+    // debugger;
     try {
       dispatch(appActions.setAppStatus({ status: "loading" }));
       let res = await todolistsAPI.getTasks(todolistId);
@@ -147,7 +150,6 @@ const updateTask = createAppAsyncThunk<UpdateTaskArgType, UpdateTaskArgType>(
     }
   },
 );
-// types
 
 export type TasksStateType = {
   [key: string]: Array<TaskType>;
