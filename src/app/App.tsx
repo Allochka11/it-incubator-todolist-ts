@@ -1,24 +1,14 @@
 import React, { useCallback, useEffect } from "react";
 import "./App.css";
-import { TodolistsList } from "features/TodolistsList/ui/TodolistsList";
-import { ErrorSnackbar } from "common/components/ErrorSnackbar/ErrorSnackbar";
+import { ErrorSnackbar } from "common/components";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeAppTC } from "./app-reducer";
-import { HashRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Login } from "features/auth/ui/Login";
 import { logoutTC } from "features/auth/model/auth-reducer";
-import {
-  AppBar,
-  Button,
-  CircularProgress,
-  Container,
-  IconButton,
-  LinearProgress,
-  Toolbar,
-  Typography,
-} from "@mui/material";
-import { Menu } from "@mui/icons-material";
+import { AppBar, Button, CircularProgress, Container, LinearProgress, Toolbar } from "@mui/material";
 import { isInitializedSelector, isLoggedInSelector, statusSelector } from "app/app.selector";
+import { TodolistsList } from "features/TodolistsList";
 
 type PropsType = {
   demo?: boolean;
@@ -51,10 +41,6 @@ function App({ demo = false }: PropsType) {
       <ErrorSnackbar />
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <Menu />
-          </IconButton>
-          <Typography variant="h6">News</Typography>
           {isLoggedIn && (
             <Button color="inherit" onClick={logoutHandler}>
               Log out

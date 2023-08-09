@@ -4,11 +4,11 @@ import { FilterValuesType, todolistsActions, todolistsThunks } from "features/To
 import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
 import { TaskStatuses } from "common/api/baseApi";
 import { Grid, Paper } from "@mui/material";
-import { AddItemForm } from "common/components/AddItemForm/AddItemForm";
-import { Todolist } from "features/TodolistsList/ui/Todolist/Todolist";
 import { Navigate } from "react-router-dom";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
 import { isLoggedInSelector, tasksSelector, todolistsSelector } from "app/app.selector";
+import { AddItemForm } from "common/components";
+import { Todolist } from "./Todolist/Todolist";
 
 type PropsType = {
   demo?: boolean;

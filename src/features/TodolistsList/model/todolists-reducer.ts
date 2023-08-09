@@ -3,8 +3,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { createAppAsyncThunk, handleServerNetworkError } from "common/utils";
-import { todolistsAPI } from "features/TodolistsList/api/todolists.api";
 import { TodolistType } from "features/TodolistsList/api/todolist.types";
+import { todolistsAPI } from "features/TodolistsList/api/todolists.api";
 
 const slice = createSlice({
   name: "todolist",
