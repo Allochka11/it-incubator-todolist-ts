@@ -48,7 +48,7 @@ export const todolistsReducer = slice.reducer;
 export const todolistsActions = slice.actions;
 
 // thunks
-const fetchTodolists = createAppAsyncThunk<{ todolists: TodolistType[] }, {}>(
+const fetchTodolists = createAppAsyncThunk<{ todolists: TodolistType[] }>(
   "todolists/fetchTodolists",
   async (arg, thunkAPI) => {
     let { dispatch, rejectWithValue } = thunkAPI;

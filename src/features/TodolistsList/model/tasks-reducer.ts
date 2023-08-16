@@ -48,6 +48,7 @@ const slice = createSlice({
           state[tl.id] = [];
         });
       })
+
       .addCase(clearTasksAndTodolists.type, () => {
         return {};
       });

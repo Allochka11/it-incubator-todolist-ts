@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { initializeAppTC } from "./app-reducer";
 import { Route, Routes } from "react-router-dom";
 import { Login } from "features/auth/ui/Login";
-import { logoutTC } from "features/auth/model/auth-reducer";
 import { AppBar, Button, CircularProgress, Container, LinearProgress, Toolbar } from "@mui/material";
 import { isInitializedSelector, isLoggedInSelector, statusSelector } from "app/app.selector";
 import { TodolistsList } from "features/TodolistsList";
+import { authThunks } from "features/auth/model/auth-reducer";
 
 type PropsType = {
   demo?: boolean;
@@ -25,7 +25,7 @@ function App({ demo = false }: PropsType) {
   }, []);
 
   const logoutHandler = useCallback(() => {
-    dispatch(logoutTC());
+    dispatch(authThunks.logout());
   }, []);
 
   if (!isInitialized) {
