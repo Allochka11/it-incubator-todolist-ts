@@ -7,11 +7,17 @@ export const instance = axios.create({
     "API-KEY": "5cebd641-898b-4e00-9878-7be19f5d7db2",
   },
 });
+export type FieldErrorType = {
+  error: string;
+  field: string;
+};
 
-export type ResponseType<D = {}> = {
+//❗ Чтобы у нас не было пересечения имен наовем общий тип BaseResponseType
+export type BaseResponseType<D = {}> = {
   resultCode: number;
-  messages: Array<string>;
+  messages: string[];
   data: D;
+  fieldsErrors: FieldErrorType[];
 };
 
 export enum TaskStatuses {

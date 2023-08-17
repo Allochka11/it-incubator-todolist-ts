@@ -1,6 +1,5 @@
 // import { setAppStatusAC } from "app/app-reducer";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { AppThunk } from "app/store";
+import { createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { authAPI, LoginParamsType } from "features/auth/api/auth.api";
