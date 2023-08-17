@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from "react";
 import "./App.css";
 import { ErrorSnackbar } from "common/components";
 import { useDispatch, useSelector } from "react-redux";
-import { initializeAppTC } from "./app-reducer";
 import { Route, Routes } from "react-router-dom";
 import { Login } from "features/auth/ui/Login";
 import { AppBar, Button, CircularProgress, Container, LinearProgress, Toolbar } from "@mui/material";
@@ -21,7 +20,7 @@ function App({ demo = false }: PropsType) {
   const dispatch = useDispatch<any>();
 
   useEffect(() => {
-    dispatch(initializeAppTC());
+    dispatch(authThunks.initializeApp());
   }, []);
 
   const logoutHandler = useCallback(() => {

@@ -12,16 +12,16 @@ const initialState: InitialStateType = {
 const slice = createSlice({
   name: "auth",
   initialState: initialState,
-  reducers: {
-    setIsLoggedIn: (state, action: PayloadAction<{ isLoggedIn: boolean }>) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(login.fulfilled, (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
     });
     builder.addCase(logout.fulfilled, (state, action) => {
+      state.isLoggedIn = action.payload.isLoggedIn;
+    });
+
+    builder.addCase(initializeApp.fulfilled, (state, action) => {
       state.isLoggedIn = action.payload.isLoggedIn;
     });
   },
@@ -30,7 +30,6 @@ const slice = createSlice({
 // actions
 
 export const authReducer = slice.reducer;
-export const authActions = slice.actions;
 
 // thunks
 
@@ -76,8 +75,28 @@ const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
   },
 );
 
+const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
+  "auth/initializeApp",
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      let res = await authAPI.me();
+      if (res.data.resultCode === 0) {
+        return { isLoggedIn: true };
+      } else {
+        // handleServerAppError(res.data, dispatch);
+        return rejectWithValue(null);
+      }
+    } catch (e) {
+      handleServerNetworkError(e, dispatch);
+      return rejectWithValue(null);
+    } finally {
+      dispatch(appActions.setAppInitialized({ isInitialized: true }));
+    }
+  },
+);
+
 type InitialStateType = {
   isLoggedIn: boolean;
 };
 
-export const authThunks = { login, logout };
+export const authThunks = { login, logout, initializeApp };
