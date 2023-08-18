@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { authAPI, LoginParamsType } from "features/auth/api/auth.api";
-import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils";
+import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError, thunkTryCatch } from "common/utils";
+import { BaseResponseType } from "common/api";
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
@@ -32,25 +33,25 @@ export const authReducer = slice.reducer;
 
 // thunks
 
-const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(
-  "auth/login",
-  async (args, { dispatch, rejectWithValue }) => {
-    dispatch(appActions.setAppStatus({ status: "loading" }));
-    try {
-      let res = await authAPI.login(args);
-      if (res.data.resultCode === 0) {
-        dispatch(appActions.setAppStatus({ status: "succeeded" }));
-        return { isLoggedIn: true };
-      } else {
-        handleServerAppError(res.data, dispatch);
-        return rejectWithValue(null);
-      }
-    } catch (e) {
-      handleServerNetworkError(e, dispatch);
+const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>("auth/login", async (args, thunkAPI) => {
+  let { dispatch, rejectWithValue } = thunkAPI;
+
+  dispatch(appActions.setAppStatus({ status: "loading" }));
+  return thunkTryCatch(thunkAPI, async () => {
+    let res = await authAPI.login(args);
+    if (res.data.resultCode === 0) {
+      dispatch(appActions.setAppStatus({ status: "succeeded" }));
+      return { isLoggedIn: true };
+    } else if (res.data.resultCode === 10) {
+      handleServerAppError(res.data, dispatch, true);
       return rejectWithValue(null);
+    } else {
+      let isShowAppError = !res.data.fieldsErrors.length;
+      handleServerAppError(res.data, dispatch, isShowAppError);
+      return rejectWithValue(res.data);
     }
-  },
-);
+  });
+});
 
 const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
   "auth/logout",

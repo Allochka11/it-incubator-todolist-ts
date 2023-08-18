@@ -2,7 +2,7 @@ import { appActions, RequestStatusType } from "app/app-reducer";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
-import { createAppAsyncThunk, handleServerNetworkError } from "common/utils";
+import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError, thunkTryCatch } from "common/utils";
 import { TodolistType } from "features/TodolistsList/api/todolist.types";
 import { todolistsAPI } from "features/TodolistsList/api/todolists.api";
 
@@ -89,6 +89,22 @@ const removeTodolist = createAppAsyncThunk<{ todolistId: string }, { todolistId:
 );
 
 const addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { title: string }>(
+  "todolists/addTodolist",
+  async (arg, thunkAPI) => {
+    let { dispatch, rejectWithValue } = thunkAPI;
+    return thunkTryCatch(thunkAPI, async () => {
+      let res = await todolistsAPI.createTodolist(arg.title);
+      if (res.data.resultCode === 0) {
+        return { todolist: res.data.data.item };
+      } else {
+        handleServerAppError(res.data, dispatch);
+        return rejectWithValue(null);
+      }
+    });
+  },
+);
+
+const _addTodolist = createAppAsyncThunk<{ todolist: TodolistType }, { title: string }>(
   "todolists/addTodolist",
   async (arg, thunkAPI) => {
     let { dispatch, rejectWithValue } = thunkAPI;
