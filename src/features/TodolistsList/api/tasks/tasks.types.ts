@@ -1,12 +1,5 @@
 import { TaskPriorities, TaskStatuses } from "common/api";
 
-export type TodolistType = {
-  id: string;
-  title: string;
-  addedDate: string;
-  order: number;
-};
-
 export type TaskType = {
   description: string;
   title: string;

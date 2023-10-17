@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from "react";
 import { TaskStatuses } from "common/api/baseApi";
-import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/model/todolists-reducer";
+import { FilterValuesType, TodolistDomainType } from "features/TodolistsList/model/todolists/todolists-reducer";
 import { Button, IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { tasksThunks } from "features/TodolistsList/model/tasks-reducer";
-import { TaskType } from "features/TodolistsList/api/todolist.types";
+import { tasksThunks } from "features/TodolistsList/model/tasks/tasks-reducer";
+import { TaskType } from "features/TodolistsList/api/tasks/tasks.types";
 import { AddItemForm, EditableSpan } from "common/components";
 import { Task } from "./Task/Task";
 
@@ -14,9 +14,6 @@ type PropsType = {
   tasks: Array<TaskType>;
   changeFilter: (value: FilterValuesType, todolistId: string) => void;
   addTask: (title: string, todolistId: string) => void;
-  changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void;
-  changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void;
-  removeTask: (taskId: string, todolistId: string) => void;
   removeTodolist: (id: string) => void;
   changeTodolistTitle: (id: string, newTitle: string) => void;
   demo?: boolean;
@@ -79,14 +76,7 @@ export const Todolist = React.memo(function ({ demo = false, ...props }: PropsTy
       <AddItemForm addItem={addTask} disabled={props.todolist.entityStatus === "loading"} />
       <div>
         {tasksForTodolist.map((t) => (
-          <Task
-            key={t.id}
-            task={t}
-            todolistId={props.todolist.id}
-            removeTask={props.removeTask}
-            changeTaskTitle={props.changeTaskTitle}
-            changeTaskStatus={props.changeTaskStatus}
-          />
+          <Task key={t.id} task={t} todolistId={props.todolist.id} />
         ))}
       </div>
       <div style={{ paddingTop: "10px" }}>

@@ -1,8 +1,8 @@
+export type { TodolistType } from "features/TodolistsList/api/todolists/todolist.types";
 export type {
   AddTaskArgType,
   GetTasksResponse,
   RemoveTaskArgType,
   TaskType,
-  TodolistType,
   UpdateTaskArgType,
-} from "../api/todolist.types";
+} from "features/TodolistsList/api/tasks/tasks.types";

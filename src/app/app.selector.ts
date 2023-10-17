@@ -1,7 +1,7 @@
 import { AppRootStateType } from "app/store";
 import { RequestStatusType } from "app/app-reducer";
-import { TodolistDomainType } from "features/TodolistsList/model/todolists-reducer";
-import { TasksStateType } from "features/TodolistsList/model/tasks-reducer";
+import { TodolistDomainType } from "features/TodolistsList/model/todolists/todolists-reducer";
+import { TasksStateType } from "features/TodolistsList/model/tasks/tasks-reducer";
 
 export const statusSelector = (state: AppRootStateType): RequestStatusType => state.app.status;
 export const isInitializedSelector = (state: AppRootStateType): boolean => state.app.isInitialized;

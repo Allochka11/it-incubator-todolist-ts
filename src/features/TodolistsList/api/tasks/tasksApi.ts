@@ -5,23 +5,10 @@ import {
   GetTasksResponse,
   RemoveTaskArgType,
   TaskType,
-  TodolistType,
   UpdateTaskArgType,
-} from "../api/index";
+} from "features/TodolistsList/api/index";
 
-export const todolistsAPI = {
-  getTodolists() {
-    return instance.get<TodolistType[]>("todo-lists");
-  },
-  createTodolist(title: string) {
-    return instance.post<BaseResponseType<{ item: TodolistType }>>("todo-lists", { title: title });
-  },
-  deleteTodolist(todolistId: string) {
-    return instance.delete<BaseResponseType>(`todo-lists/${todolistId}`);
-  },
-  updateTodolist(id: string, title: string) {
-    return instance.put<BaseResponseType>(`todo-lists/${id}`, { title: title });
-  },
+export const tasksAPI = {
   getTasks(todolistId: string) {
     return instance.get<GetTasksResponse>(`todo-lists/${todolistId}/tasks`);
   },
