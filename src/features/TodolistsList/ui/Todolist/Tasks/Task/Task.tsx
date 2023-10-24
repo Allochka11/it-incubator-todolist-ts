@@ -6,7 +6,7 @@ import { EditableSpan } from "common/components";
 import { TaskType } from "features/TodolistsList/api/tasks/tasks.types";
 import { tasksThunks } from "features/TodolistsList/model/tasks/tasks-reducer";
 import { useActions } from "common/hooks/useActions";
-import s from "./Task.module.css";
+import s from "features/TodolistsList/ui/Todolist/Tasks/Task/Task.module.css";
 
 type Props = {
   task: TaskType;

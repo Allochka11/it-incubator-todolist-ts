@@ -1,1 +1,1 @@
-export { Task } from "./Task/Task";
+export { Task } from "./Tasks/Task/Task";

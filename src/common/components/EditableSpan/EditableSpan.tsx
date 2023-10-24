@@ -23,9 +23,25 @@ export const EditableSpan = React.memo(function (props: EditableSpanPropsType) {
   const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.currentTarget.value);
   };
+  const activateViewModeOnEnter = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      if (title.length > 0) {
+        setEditMode(false);
+        props.onChange(title);
+      }
+    }
+  };
 
   return editMode ? (
-    <TextField value={title} onChange={changeTitle} autoFocus onBlur={activateViewMode} />
+    <TextField
+      value={title}
+      onChange={changeTitle}
+      autoFocus
+      onBlur={activateViewMode}
+      onKeyDown={(event) => {
+        activateViewModeOnEnter(event);
+      }}
+    />
   ) : (
     <span onDoubleClick={activateEditMode}>{props.value}</span>
   );
