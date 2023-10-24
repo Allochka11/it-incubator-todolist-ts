@@ -9,11 +9,7 @@ import { isInitializedSelector, isLoggedInSelector, statusSelector } from "app/a
 import { TodolistsList } from "features/TodolistsList";
 import { authThunks } from "features/auth/model/auth-reducer";
 
-type PropsType = {
-  demo?: boolean;
-};
-
-function App({ demo = false }: PropsType) {
+function App() {
   const status = useSelector(statusSelector);
   const isInitialized = useSelector(isInitializedSelector);
   const isLoggedIn = useSelector(isLoggedInSelector);
@@ -50,7 +46,7 @@ function App({ demo = false }: PropsType) {
       </AppBar>
       <Container fixed>
         <Routes>
-          <Route path={"/"} element={<TodolistsList demo={demo} />} />
+          <Route path={"/"} element={<TodolistsList />} />
           <Route path={"/login"} element={<Login />} />
         </Routes>
       </Container>

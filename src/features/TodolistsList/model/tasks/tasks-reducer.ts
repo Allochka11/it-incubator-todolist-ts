@@ -78,15 +78,14 @@ const addTask = createAppAsyncThunk<{ task: TaskType }, AddTaskArgType>("tasks/a
   let { dispatch, rejectWithValue } = thunkAPI;
   try {
     dispatch(appActions.setAppStatus({ status: "loading" }));
-
     let res = await tasksAPI.createTask(arg);
     if (res.data.resultCode === 0) {
       const task = res.data.data.item;
       dispatch(appActions.setAppStatus({ status: "succeeded" }));
       return { task };
     } else {
-      handleServerAppError(res.data, dispatch);
-      return rejectWithValue(null);
+      handleServerAppError(res.data, dispatch, false);
+      return rejectWithValue(res.data);
     }
   } catch (e: any) {
     handleServerNetworkError(e, dispatch);

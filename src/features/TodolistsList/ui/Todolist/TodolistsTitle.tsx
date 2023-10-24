@@ -3,7 +3,6 @@ import { IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import React, { useCallback } from "react";
 import { TodolistDomainType, todolistsThunks } from "features/TodolistsList/model/todolists/todolists-reducer";
-import { TaskType } from "features/TodolistsList/api";
 import { useActions } from "common/hooks/useActions";
 
 type Props = {

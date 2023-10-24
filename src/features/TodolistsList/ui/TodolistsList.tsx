@@ -8,11 +8,7 @@ import { isLoggedInSelector, tasksSelector, todolistsSelector } from "app/app.se
 import { AddItemForm } from "common/components";
 import { Todolist } from "./Todolist/Todolist";
 
-type Props = {
-  demo?: boolean;
-};
-
-export const TodolistsList = ({ demo = false }: Props) => {
+export const TodolistsList = () => {
   const todolists = useSelector(todolistsSelector);
   const tasks = useSelector(tasksSelector);
   const isLoggedIn = useSelector(isLoggedInSelector);
@@ -20,7 +16,7 @@ export const TodolistsList = ({ demo = false }: Props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (demo || !isLoggedIn) {
+    if (!isLoggedIn) {
       return;
     }
     dispatch(todolistsThunks.fetchTodolists());
@@ -28,7 +24,7 @@ export const TodolistsList = ({ demo = false }: Props) => {
 
   const addTodolist = useCallback(
     (title: string) => {
-      dispatch(todolistsThunks.addTodolist({ title }));
+      return dispatch(todolistsThunks.addTodolist({ title })).unwrap();
     },
     [dispatch],
   );
@@ -49,7 +45,7 @@ export const TodolistsList = ({ demo = false }: Props) => {
           return (
             <Grid item key={tl.id}>
               <Paper style={{ padding: "10px" }}>
-                <Todolist todolist={tl} tasks={allTodolistTasks} demo={demo} />
+                <Todolist todolist={tl} tasks={allTodolistTasks} />
               </Paper>
             </Grid>
           );

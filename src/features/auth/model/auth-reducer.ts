@@ -4,7 +4,7 @@ import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { authAPI, LoginParamsType } from "features/auth/api/auth.api";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError, thunkTryCatch } from "common/utils";
-import { BaseResponseType } from "common/api";
+import { AnyAction } from "redux";
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
@@ -14,16 +14,22 @@ const slice = createSlice({
   initialState: initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(login.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-    });
-    builder.addCase(logout.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-    });
-
-    builder.addCase(initializeApp.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
-    });
+    builder.addMatcher(
+      (action: AnyAction) => {
+        if (
+          action.type === "auth/initializeApp/fulfilled" ||
+          action.type === "auth/logout/fulfilled" ||
+          action.type === "auth/login/fulfilled"
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn;
+      },
+    );
   },
 });
 
