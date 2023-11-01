@@ -1,10 +1,8 @@
-// import { setAppStatusAC } from "app/app-reducer";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { appActions } from "app/app-reducer";
 import { clearTasksAndTodolists } from "common/actions/common.actions";
 import { authAPI, LoginParamsType } from "features/auth/api/auth.api";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError, thunkTryCatch } from "common/utils";
-import { AnyAction } from "redux";
 
 const initialState: InitialStateType = {
   isLoggedIn: false,
@@ -15,17 +13,7 @@ const slice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
-      (action: AnyAction) => {
-        if (
-          action.type === "auth/initializeApp/fulfilled" ||
-          action.type === "auth/logout/fulfilled" ||
-          action.type === "auth/login/fulfilled"
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-      },
+      isAnyOf(authThunks.initializeApp.fulfilled, authThunks.login.fulfilled, authThunks.logout.fulfilled),
       (state, action) => {
         state.isLoggedIn = action.payload.isLoggedIn;
       },
@@ -89,7 +77,7 @@ const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, undefined>(
       if (res.data.resultCode === 0) {
         return { isLoggedIn: true };
       } else {
-        // handleServerAppError(res.data, dispatch);
+        handleServerAppError(res.data, dispatch);
         return rejectWithValue(null);
       }
     } catch (e) {

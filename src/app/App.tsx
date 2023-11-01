@@ -8,15 +8,17 @@ import { AppBar, Button, CircularProgress, Container, LinearProgress, Toolbar } 
 import { isInitializedSelector, isLoggedInSelector, statusSelector } from "app/app.selector";
 import { TodolistsList } from "features/TodolistsList";
 import { authThunks } from "features/auth/model/auth-reducer";
+import { useActions } from "common/hooks/useActions";
 
 function App() {
   const status = useSelector(statusSelector);
   const isInitialized = useSelector(isInitializedSelector);
   const isLoggedIn = useSelector(isLoggedInSelector);
   const dispatch = useDispatch<any>();
+  const { initializeApp } = useActions(authThunks);
 
   useEffect(() => {
-    dispatch(authThunks.initializeApp());
+    initializeApp();
   }, []);
 
   const logoutHandler = useCallback(() => {
